@@ -1,0 +1,236 @@
+openapi: 3.0.1
+info:
+  title: Personal Budget API
+  description: A RESTful API used to keep track of personal budget
+  version: 1.0.0
+servers:
+- url: /
+paths:
+  /envelopes:
+    summary: Get all the envelopes
+    description: This path is used to retrieve all the envelopes from the envelopes
+      table
+    get:
+      tags:
+      - Envelopes
+      summary: Get all envelopes
+      description: This path retrieves all the envelopes
+      operationId: get_envelopes
+      responses:
+        default:
+          description: Default error sample response
+          content:
+            application/json:
+              examples:
+                envelopes:
+                  value: "[{\"id\":1,\"title\":\"Hobbies\",\"budget\":\"$150.00\"\
+                    },{\"id\":2,\"title\":\"Groceries\",\"budget\":\"$760.00\"},{\"\
+                    id\":3,\"title\":\"Entertainment\",\"budget\":\"$100.00\"}]"
+      x-swagger-router-controller: Envelopes
+  /envelopes/{id}:
+    summary: Get an envelope
+    description: This path is used to retrieve the envelope with the specified id
+    get:
+      tags:
+      - Envelopes
+      summary: Get an envelope
+      description: This path retrieves an envelope of the specified id
+      operationId: get_envelope
+      parameters:
+      - name: id
+        in: path
+        description: The id of the envelope.
+        required: true
+        style: simple
+        explode: false
+        schema:
+          type: string
+      responses:
+        default:
+          description: Default error sample response
+          content:
+            application/json:
+              examples:
+                envelope:
+                  value: "[{\"id\":1,\"title\":\"Hobbies\",\"budget\":\"$150.00\"\
+                    }]"
+      x-swagger-router-controller: Envelopes
+  /createEnvelope:
+    summary: Add a new envelope
+    description: This path creates and adds a new envelope to the envelopes table
+    post:
+      tags:
+      - Envelopes
+      summary: Add a new Envelope
+      description: This path adds a new envelope to the table
+      operationId: create_envelope
+      requestBody:
+        description: A new envelope object
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Envelope'
+      responses:
+        default:
+          description: Default error sample response
+          content:
+            text/plain; charset=utf-8:
+              examples:
+                envelope added:
+                  value: "User added with ID: 4"
+      x-swagger-router-controller: Envelopes
+  /updateEnvelope/{id}:
+    summary: Update an existing envelope
+    description: This path updates an envelope with the specified id
+    put:
+      tags:
+      - Envelopes
+      summary: Update an envelope
+      description: 'This path updates the specified envelope '
+      operationId: update_envelope
+      parameters:
+      - name: id
+        in: path
+        description: The id of the envelope.
+        required: true
+        style: simple
+        explode: false
+        schema:
+          type: string
+      responses:
+        default:
+          description: Default error sample response
+          content:
+            text/plain; charset=utf-8:
+              examples:
+                envelope modified:
+                  value: "User modified with ID: 4"
+      x-swagger-router-controller: Envelopes
+  /deleteEnvelope/{id}:
+    summary: Delete an envelope
+    description: This path deletes an envelope with the specified id
+    delete:
+      tags:
+      - Envelopes
+      summary: Delete an envelope
+      description: This path deletes the specified envelope
+      operationId: delete_envelope
+      parameters:
+      - name: id
+        in: path
+        description: The id of the envelope.
+        required: true
+        style: simple
+        explode: false
+        schema:
+          type: string
+      responses:
+        default:
+          description: Default error sample response
+          content:
+            text/plain; charset=utf-8:
+              examples:
+                envelope deleted:
+                  value: "User deleted with ID: 4"
+      x-swagger-router-controller: Envelopes
+  /transfers:
+    summary: Get all the transfers
+    description: This path retrieves all the transfers from the transfers table
+    get:
+      tags:
+      - Transfers
+      summary: Get all transfers
+      description: This path retrieves all the transfers from the table
+      operationId: get_transfers
+      responses:
+        default:
+          description: Default error sample response
+          content:
+            application/json:
+              examples:
+                transfers:
+                  value: "[{\"id\":1,\"date\":\"2022-08-23T18:30:00.000Z\",\"amount\"\
+                    :\"$100.00\",\"recipient\":\"Groceries\",\"transferer\":\"Entertainment\"\
+                    }]"
+      x-swagger-router-controller: Transfers
+  /createTransfer:
+    summary: Add a new transfer
+    description: This path creates and adds a new transfer to the transfers table
+      and updates the budgets
+    post:
+      tags:
+      - Transfers
+      summary: Add a new transfer
+      description: This path creates and adds a new transfer data to the table
+      operationId: create_transfer
+      requestBody:
+        description: A new transfer object
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Transfer'
+      responses:
+        default:
+          description: Default error sample response
+          content:
+            text/plain; charset=utf-8:
+              examples:
+                add Transfer:
+                  value: "User added with ID: 2"
+      x-swagger-router-controller: Transfers
+  /deleteTransfer/{id}:
+    summary: Delete a transfer
+    description: This path deletes an envelope with the specified id and updates the
+      budgets
+    delete:
+      tags:
+      - Transfers
+      summary: Delete an envelope
+      description: This path deletes the specified envelope from the table
+      operationId: delete_transfer
+      parameters:
+      - name: id
+        in: path
+        description: The id of the transfer.
+        required: true
+        style: simple
+        explode: false
+        schema:
+          type: string
+      responses:
+        default:
+          description: Default error sample response
+          content:
+            text/plain; charset=utf-8:
+              examples:
+                delete Transfer:
+                  value: "User deleted with ID: 2"
+      x-swagger-router-controller: Transfers
+components:
+  schemas:
+    Envelope:
+      type: object
+      properties:
+        id:
+          type: number
+        title:
+          type: string
+        budget:
+          type: number
+      xml:
+        name: Envelope
+    Transfer:
+      type: object
+      properties:
+        id:
+          type: number
+        date:
+          type: string
+        amount:
+          type: number
+        recipient:
+          type: string
+        transferer:
+          type: string
+      xml:
+        name: Transfer
